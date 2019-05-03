@@ -1,4 +1,4 @@
-# s5-04_The-Gossip-Project
+# s5-05_The-Gossip-Project
 
 Group : François Loupias, Thomas Guilmin
 
