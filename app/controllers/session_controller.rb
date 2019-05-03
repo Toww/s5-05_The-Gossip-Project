@@ -8,7 +8,7 @@ class SessionController < ApplicationController
 
 		if user && user.authenticate(params[:password])
 			log_in(user)
-
+			remember_user
 			flash[:success] = "Welcome back, #{user.first_name}! 👍"
 			redirect_to root_path
 		else
@@ -19,7 +19,9 @@ class SessionController < ApplicationController
 	end
 
 	def destroy
+		forget(current_user)
 		session.delete(:user_id)
+		@current_user = nil
 		redirect_to root_path
 	end
 end
