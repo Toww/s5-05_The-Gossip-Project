@@ -5,20 +5,24 @@
 			<!-- Le titre de la page -->
 			<h3 class="card-title text-center m-4">User access</h3>
 
-
-
 			<!-- Zone du formulaire -->
-			<%= form_tag url_for(action: 'create'), method: "get" do %>
+			<%= form_for(:session, url: session_index_path) do |f| %>
 
-			<%= label_tag 'E-Mail' %>
-			<%= text_field_tag 'email', nil, class: "form-control mb-3" %>
+			<%= f.label :email %>
+			<%= f.email_field :email, class: 'form-control' %>
 
-			<%= label_tag 'Password' %>
-			<%= password_field_tag 'password',nil, class: "form-control mb-3"  %>
+			<%= f.label :password %>
+			<%= f.password_field :password, class: 'form-control' %>
 
-			<%= submit_tag "Log in", class: "btn btn-primary" %>
-
+			<%= f.label :remember_me, class: "checkbox inline" do %>
+			<%= f.check_box :remember_me %>
+			<span>Remember me on this computer</span>
 			<% end %>
+
+			<%= f.submit "Log in", class: "btn btn-primary form-control" %>
+			<% end %>
+
+			<p>New user? <%= link_to "Sign up now!", new_user_path %></p>
 
 		</div>
 	</div>
