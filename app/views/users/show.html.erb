@@ -1,0 +1,28 @@
+<!-- On fait appel à l'auteur de la page en récupérant son ID qui est en paramètre dans
+L'URL grâce à la méthode appelée dans le controller, puis on affiche les infos de l'auteur
+en suivant la logique de la base de données-->
+
+
+<!-- On inclus le contenu dans un row et une colonne pour limiter la largeur -->
+<div class="row">
+  <div class="col-6 mx-auto">
+
+    <h3 class="card-title text-center m-4"><%= "#{@user.first_name} #{@user.last_name}" %></h3>
+
+    <!-- Sa description -->
+    <p class="text-center"><em><%= @user.description %></em></p>
+
+    <ul class="list-group-flush">
+      <!-- Son email -->
+      <li class="list-group-item"><%= "Email : #{@user.email}" %></li>
+      <!-- Sa ville -->
+      <li class="list-group-item">City : <%= link_to @user.city.name, city_path(@user.city.id) %></li>
+      <!-- Son age -->
+      <li class="list-group-item"><%= "Age : #{@user.age}" %></li>
+      <!-- La date de son inscription -->
+      <li class="list-group-item"><%= "Member since : #{@user.created_at}" %></li>
+    </ul>
+
+  </div>
+</div>
+

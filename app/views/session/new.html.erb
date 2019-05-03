@@ -1,0 +1,25 @@
+<!-- On inclus le contenu dans un row et une colonne pour limiter la largeur -->
+<div class="container">
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<!-- Le titre de la page -->
+			<h3 class="card-title text-center m-4">User access</h3>
+
+
+
+			<!-- Zone du formulaire -->
+			<%= form_tag url_for(action: 'create'), method: "get" do %>
+
+			<%= label_tag 'E-Mail' %>
+			<%= text_field_tag 'email', nil, class: "form-control mb-3" %>
+
+			<%= label_tag 'Password' %>
+			<%= password_field_tag 'password',nil, class: "form-control mb-3"  %>
+
+			<%= submit_tag "Log in", class: "btn btn-primary" %>
+
+			<% end %>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The Gossip Project</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <!-- On met le favicon THP qu'on a volé sur le site  -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.thehackingproject.org/assets/favicon/apple-touch-icon-c01aaccf467f7cc3d79bbce743d60779f5b833fdc4500cebd07a5e11a07a5c31.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.thehackingproject.org/assets/favicon/favicon-32x32-804b12d1c41c60fe721477b7c3b0a32811dc610580dd40ac92f1cc04cbd05ca4.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.thehackingproject.org/assets/favicon/favicon-16x16-d96ba65e5785d32474df9ebc6fbfd5442c751d527b10981a474bc3b7a4079d01.png">
+
+  <!-- On charge Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+
+  
+</head> 
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <%= link_to "The Gossip Project", root_path, class: "navbar-brand" %>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- On affiche le menu avec les bonnes classes Bootstrap pour gérer l'affichage -->
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <!-- Les liens faits avec link_to pour ne pas écrire d'URL en dur -->
+        <%= link_to "Home", root_path, class: "nav-item nav-link" %>
+        <%= link_to "Team", team_path, class: "nav-item nav-link" %>
+        <%= link_to "Contact", contact_path, class: "nav-item nav-link" %>
+
+        <% if session[:user_id] %>
+        <%= link_to "Log out", session_path(session[:user_id]), method: :delete, class: "nav-item nav-link" %>
+        <% end %>
+
+        <% unless session[:user_id] %>
+        <!-- Dropdown pour incription et login --> 
+        <ul class="navbar-nav">  
+          <li class="nav-item dropdown">
+           <a class="nav-link dropdown-toggle" href="#" id="dropdown08" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User</a>
+           <div class="dropdown-menu" aria-labelledby="dropdown08">
+             <%= link_to "Sign up", new_user_path, class: "dropdown-item"%>  
+             <%= link_to "Sign in", session_new_path, class: "dropdown-item"%>  
+           </div>
+         </li>
+       </ul>
+       <% end %>
+     </div>
+   </nav>
+
+   <!-- Zone pour afficher un flash (message de confirmation), s'il existe -->
+   <% flash.each do |key, value| %>
+   <div class="<%= flash_class(key) %>">
+    <%= value %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <% end %>
+
+  <!-- yield importe le contenu de la page depuis les différents fichiers de view correspondant
+  à la page à afficher. On prépare un container pour l'ensemble du contenu de la page via
+  Bootstrap -->
+  <%= yield %>
+
+  <footer class="footer mt-4 bg-dark">
+   <div class="container text-center text-light">
+    Made with 🦊 🐙 in Lyon.
+  </div>
+</footer>
+
+<!-- On appelle le Javascript de Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

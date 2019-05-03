@@ -1,0 +1,106 @@
+<!-- On fait appel au gossip de la page en récupérant son ID qui est en paramètre dans
+L'URL grâce à la méthode appelée dans le controller, puis on affiche les infos du gossip
+en suivant la logique de la base de données-->
+
+<!-- On inclus le contenu dans un row et une colonne pour limiter la largeur -->
+<div class="container">
+	<div class="row">
+		<div class="col-6 mx-auto">
+
+			<!-- Le titre du gossip -->
+			<h2 class="card-title text-center m-4">	<%= @gossip.title %></h2>
+
+			<!-- ----------- GOSSIPS ----------- -->
+
+			<div class="row justify-content-md-center mb-2">
+				<div class="col">
+					<div class="card">
+						<div class="card-body text-center">
+							<!-- Le contenu du gossip -->
+							<p class="card-title lead">	<%= @gossip.content %></p>
+							<!-- La date de création du gossip -->
+							<small class="card-text text-muted"><%= @gossip.created_at %></small>
+							<!-- L'auteur du gossip -->
+						<!-- On affiche l'auteur sous forme de lien pour pouvoir accéder à sa page.
+						Le lien permet d'accéder à la page auteur avec son ID en paramètre dans
+						l'URL -->
+						<p class="card-text text-muted">
+							Author : <%= link_to "#{@gossip.user.first_name} #{@gossip.user.last_name}", user_path(@gossip.user.id) %> (from <%= link_to @gossip.user.city.name, city_path(@gossip.user.city.id) %>)
+						</p>
+						
+						<% if @gossip.user == current_user %>
+						<%= link_to "Edit gossip", edit_gossip_path, class: "btn btn-primary" %> <%= link_to "Delete gossip", gossip_path, data: {confirm: "Are you sure?"}, method: "delete", class: "btn btn-danger mb-0 ml-2" %>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- La card Like -->
+					<small class="card border-muted col-12 text-center p-1 mb-4 ">
+				<!-- Si un utilisateur est connecté, on affiche les boutons like / unlike -->
+			<% if current_user %>
+				<!-- Si on a un like sur le gossip, on affiche le bouton unlike -->
+				<% if Like.where(user: current_user, gossip: @gossip).count != 0 %>
+
+					<!-- Ici, on doit cibler le like précis qui concerne le bouton.
+					On utilise where qui retourne un tableau avec tous les likes qui matchent le
+					current_user et ce gossip. Un user ne peut liker qu'un gossip qu'une fois, donc
+					il n'y a qu'un élément dans l'array, qui est en [0], et on récupère son id. -->
+
+					<%= link_to "Unlike",
+					gossip_like_path(controller: :like,
+													action: :destroy,
+													gossip_id: @gossip.id,
+													id: Like.where(user: current_user, gossip: @gossip)[0].id),
+													method: "DELETE" %>
+				<% else %>
+
+				<!-- Si l'user n'a pas liké le gossip, on affiche le bouton like -->
+					<%= link_to "Like", gossip_likes_path(controller: :likes, action: :create, gossip_id: @gossip.id), method: "post" %>
+				<% end %>
+			<% end  %>
+				<!-- On affiche un coeur et le nombre de likes -->
+				 ❤<br/>
+				 <%= @gossip.likes.count %> 
+			</small>
+
+
+		<!-- ----------- COMMENTAIRES ----------- -->
+		<h5 class="text-center">Comments</h5>
+
+		<!-- Zone du formulaire de commentaire -->
+		<%= form_tag gossip_comments_path(controller: :comments, action: :create, gossip_id: @gossip.id), method: "post" do %>
+
+		<%= label_tag 'Content' %>
+		<%= text_area_tag 'content', @comment.content, class: "form-control" %>
+		<br/>
+		
+		<%= submit_tag "Add comment", class: "btn btn-primary mb-5" %> 
+		<% end %>
+
+		<!-- On récupère les commentaires et on les affiche -->
+		<div class="list-group mx-auto">
+
+			<% @gossip.comments.reverse.each do |comment| %>
+
+			<div class="list-group-item mb-2">
+				<div class="row">
+					<div class="col-9">
+						<p class="mb-1"><%= comment.content %></p>
+
+						<!-- On affiche le nom de l'utilisateur qui a écrit le commentaire -->
+						<small>by <%= "#{comment.user.first_name} #{comment.user.last_name}" %>
+						</small>
+					</div>
+					<div class="col-3 text-right">
+						<small><%= link_to "Edit", edit_gossip_comment_path(@gossip.id, comment.id) %></small>
+					</div>
+				</div>
+			</div>
+
+			<% end %>
+		</div>
+
+	</div>
+</div>
+</div>
